@@ -1,0 +1,25 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:5
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: piwigo
+      MYSQL_USER: piwigo-user
+      MYSQL_PASSWORD: my-secret-password-piwigo
+    healthcheck:
+      test: ["CMD", "mysqladmin", "-u", "piwigo-user", "-pmy-secret-password-piwigo", "ping"]
+      timeout: 1s
+      retries: 30
+    volumes:
+      # seed and admin with username "testadmin" and password "password"
+      - ./piwigo-seed.sql:/docker-entrypoint-initdb.d/piwigo-seed.sql
+  
+  piwigo:
+    build: .
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    ports:
+      - "8082:80"

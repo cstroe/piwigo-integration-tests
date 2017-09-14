@@ -1,0 +1,3 @@
+[submodule "Piwigo"]
+	path = Piwigo
+	url = https://github.com/Piwigo/Piwigo.git
